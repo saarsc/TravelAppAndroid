@@ -3,6 +3,7 @@ package com.tripinfo.israeltravelinsurance;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,15 +34,11 @@ public class LoginActivity extends AppCompatActivity {
     EditText _Date;
     Button _loginButton;
     public List<User> usersList;
-    public List<String> dates;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference dbRef = database.getReference().child("user");
     Calendar calendar = Calendar.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getDataFromReF();
         setContentView(R.layout.activity_login);
         _emailText = findViewById(R.id.input_email);
         _Date = findViewById(R.id.date);
@@ -57,8 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         _Date.setOnClickListener((View v) -> new DatePickerDialog(this, date, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
-        dates = new ArrayList<>();
-        usersList = new ArrayList<>();
+        Intent i =getIntent();
+        usersList =(List<User>) i.getSerializableExtra("userList");
     }
 
     private void updateLabel() {
@@ -81,11 +78,10 @@ public class LoginActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("מאמת...");
         progressDialog.show();
 
 
-        getDataFromReF();
         usersList = clearDup(usersList);
         String userMail = _emailText.getText().toString();
         String returnDate = _Date.getText().toString().replace("/", ".");
@@ -99,11 +95,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (userExsits(userMail, returnDate)) {
                         onLoginSuccess();
                     } else {
-                        // onLoginFailed();
+                         onLoginFailed();
                         progressDialog.dismiss();
                     }
 
-                }, 3000);
+                }, 500);
     }
 
 
@@ -115,7 +111,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        finish();
+        Intent i = new Intent(this, MainActivity.class);
+        String date = _Date.getText().toString();
+        SharedPreferences.Editor editor = getSharedPreferences("userReturnDate", MODE_PRIVATE).edit();
+        editor.putString("date", date);
+        editor.commit();
+        startActivity(i);
     }
 
     public void onLoginFailed() {
@@ -150,42 +151,6 @@ public class LoginActivity extends AppCompatActivity {
     private void toast(String message) {
         Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
     }
-
-    private void getDataFromReF() {
-
-        dbRef.addChildEventListener(new ChildEventListener() {
-
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                usersList.add(dataSnapshot.getValue(User.class));
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-
-        });
-    }
-
     private ArrayList<User> clearDup(@NonNull List<User> dup) {
         ArrayList<User> og = new ArrayList<>();
         for (User user : dup) {

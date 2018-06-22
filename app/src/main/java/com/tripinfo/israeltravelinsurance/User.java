@@ -1,6 +1,8 @@
 package com.tripinfo.israeltravelinsurance;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
     private String mail;
     private String date;
 
