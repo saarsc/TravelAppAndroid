@@ -8,23 +8,19 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:687578003628:android:948bb6497d4bd699",
+        "mobilesdk_app_id": "1:687578003628:android:aa4b91bf071c6e43",
         "android_client_info": {
-          "package_name": "com.tripinfo.israeltravelinsurance"
+          "package_name": "israeltravelinsurance.israeltravelinsurance"
         }
       },
       "oauth_client": [
         {
-          "client_id": "687578003628-b9lddtg725v26235fahcrvoeacevrpba.apps.googleusercontent.com",
+          "client_id": "687578003628-rg2crij6nmufmjegj0oh3ddlkbr6ftvl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.tripinfo.israeltravelinsurance",
+            "package_name": "israeltravelinsurance.israeltravelinsurance",
             "certificate_hash": "6a4f8aa3fe6ca081cc1ca2697787a8eb06d32f04"
           }
-        },
-        {
-          "client_id": "687578003628-dk8qfsp0dtmsu0urare1b3gvgk63kmck.apps.googleusercontent.com",
-          "client_type": 3
         },
         {
           "client_id": "687578003628-dk8qfsp0dtmsu0urare1b3gvgk63kmck.apps.googleusercontent.com",

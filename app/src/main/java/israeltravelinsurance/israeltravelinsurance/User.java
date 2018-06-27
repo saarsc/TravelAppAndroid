@@ -1,4 +1,4 @@
-package com.tripinfo.israeltravelinsurance;
+package israeltravelinsurance.israeltravelinsurance;
 
 import java.io.Serializable;
 

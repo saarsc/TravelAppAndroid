@@ -1,4 +1,4 @@
-package com.tripinfo.israeltravelinsurance;
+package israeltravelinsurance.israeltravelinsurance;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (userExsits(userMail, returnDate)) {
                         onLoginSuccess();
                     } else {
-                         onLoginFailed();
+                        onLoginFailed();
                         progressDialog.dismiss();
                     }
 

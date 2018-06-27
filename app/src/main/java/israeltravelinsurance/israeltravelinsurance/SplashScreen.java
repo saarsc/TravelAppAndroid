@@ -1,4 +1,4 @@
-package com.tripinfo.israeltravelinsurance;
+package israeltravelinsurance.israeltravelinsurance;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,63 +44,63 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
         SharedPreferences settings = getSharedPreferences("userReturnDate", MODE_PRIVATE);
         String storedDate = settings.getString("date", "");
         usersList = new ArrayList<>();
-//        if (storedDate.equals("")) {
-            dbRef.addChildEventListener(new ChildEventListener() {
+        if (storedDate.equals("")) {
+        dbRef.addChildEventListener(new ChildEventListener() {
 
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    noChild++;
-                    usersList.add(dataSnapshot.getValue(User.class));
-                    if (noChild >= dataSnapshot.getChildrenCount()) {
-                        done = (true);
-                    }
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                noChild++;
+                usersList.add(dataSnapshot.getValue(User.class));
+                if (noChild >= dataSnapshot.getChildrenCount()) {
+                    done = (true);
                 }
+            }
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                }
+            }
 
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                }
+            }
 
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    // Failed to read value
-                }
-            });
-            new Thread(() -> {
-                try {
-                    //Put the gif file into the layout
-                    InputStream inputStream = getAssets().open("loadinganimation.gif");
-                    byte[] bytes = IOUtils.toByteArray(inputStream);
-                    gifImageView.setBytes(bytes);
-                    gifImageView.startAnimation();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    while (!done) ;
-                    i = new Intent(this, LoginActivity.class);
-                    i.putExtra("userList", (Serializable) usersList);
-                    startActivity(i);
-                }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
+        new Thread(() -> {
+            try {
+                //Put the gif file into the layout
+                InputStream inputStream = getAssets().open("loadinganimation.gif");
+                byte[] bytes = IOUtils.toByteArray(inputStream);
+                gifImageView.setBytes(bytes);
+                gifImageView.startAnimation();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                while (!done) ;
+                i = new Intent(this, LoginActivity.class);
+                i.putExtra("userList", (Serializable) usersList);
+                startActivity(i);
+            }
 
-            }).start();
-        }/* else {
+        }).start();
+    }
+     else {
             DateFormat format = new SimpleDateFormat("dd/MM/YYYY", Locale.US);
-
             try {
                 Date date;
                 date = format.parse(storedDate);
@@ -113,10 +113,8 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
                 e.printStackTrace();
             }
             startActivity(i);
+        }
 
-        }*/
 
-
-    }
-//}
-
+}
+}
