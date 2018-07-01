@@ -1,7 +1,6 @@
 package israeltravelinsurance.israeltravelinsurance;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -11,33 +10,28 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static israeltravelinsurance.israeltravelinsurance.AppConfig.FORMATTED_ADDRESS;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.GEOMETRY;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.GOOGLE_BROWSER_API_KEY;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.ICON;
@@ -48,25 +42,28 @@ import static israeltravelinsurance.israeltravelinsurance.AppConfig.MIN_DISTANCE
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.MIN_TIME_BW_UPDATES;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.NAME;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.OK;
+import static israeltravelinsurance.israeltravelinsurance.AppConfig.OPEING_HOURS;
+import static israeltravelinsurance.israeltravelinsurance.AppConfig.OPEN_NOW;
+import static israeltravelinsurance.israeltravelinsurance.AppConfig.PHONE;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.PLACE_ID;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.PLAY_SERVICES_RESOLUTION_REQUEST;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.PROXIMITY_RADIUS;
-import static israeltravelinsurance.israeltravelinsurance.AppConfig.REFERENCE;
+import static israeltravelinsurance.israeltravelinsurance.AppConfig.RATING;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.STATUS;
-import static israeltravelinsurance.israeltravelinsurance.AppConfig.SUPERMARKET_ID;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.TAG;
-import static israeltravelinsurance.israeltravelinsurance.AppConfig.VICINITY;
+import static israeltravelinsurance.israeltravelinsurance.AppConfig.WEEKDAY_TEXT;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.ZERO_RESULTS;
 
 
-
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class MapsActivity extends AppCompatActivity implements
         LocationListener {
 
-    private GoogleMap mMap;
     LocationManager locationManager;
-    CoordinatorLayout mainCoordinatorLayout;
-    Location mLastLocation;
+    JSONObject oneLocation;
+    AppController appController = new AppController();
+    static ArrayList<NearbyPlaces>  nearbyPlaces = new ArrayList<>();
+    int myPremmision;
+    ListView placeView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,22 +73,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         setContentView(R.layout.activity_maps);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-        mainCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainCoordinatorLayout);
+        placeView = findViewById(R.id.placesList);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED ) {
+            //Should the request be displayed
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        myPremmision);
+            }
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        myPremmision);
+            }
+        }
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             showLocationSettings();
         }
+        //Get the current user location
+        Location location = getLastKnownLocation();
+
+        if (location != null) {
+            onLocationChanged(location);
+        }
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+        locationManager.requestLocationUpdates(bestProvider, MIN_TIME_BW_UPDATES,
+                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
     }
 
     //Location Settings are off
     private void showLocationSettings() {
         Snackbar snackbar = Snackbar
-                .make(mainCoordinatorLayout, "Location Error: GPS Disabled!",
+                .make(placeView, "Location Error: GPS Disabled!",
                         Snackbar.LENGTH_LONG)
                 .setAction("Enable", v -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
         snackbar.setActionTextColor(Color.RED);
@@ -105,42 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         snackbar.show();
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
-        showCurrentLocation();
-    }
-
-    private void showCurrentLocation() {
-
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = getLastKnownLocation();
-
-        if (location != null) {
-            onLocationChanged(location);
-        }
-        Criteria criteria = new Criteria();
-        String bestProvider = locationManager.getBestProvider(criteria, true);
-        locationManager.requestLocationUpdates(bestProvider, MIN_TIME_BW_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-    }
-@SuppressWarnings("MissingPermission")
+    @SuppressWarnings("MissingPermission")
     private Location getLastKnownLocation() {
         List<String> providers = locationManager.getProviders(true);
         Location bestLocation = null;
@@ -161,78 +145,62 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void loadNearByPlaces(double latitude, double longitude) {
-        AppController appController = new AppController();
-//YOU Can change this type at your own will, e.g hospital, cafe, restaurant.... and see how it all works
-        String type = "בית חבד";
+        nearbyPlaces.clear();
+        String type = "hospital";
         StringBuilder googlePlacesUrl =
-                new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?");
-                googlePlacesUrl.append("input=").append(type);
+                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+//        googlePlacesUrl.append("input=").append(type);
         googlePlacesUrl.append("location=").append(latitude).append(",").append(longitude);
         googlePlacesUrl.append("&radius=").append(PROXIMITY_RADIUS);
-//        googlePlacesUrl.append("&types=").append(type);
+        googlePlacesUrl.append("&types=").append(type);
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key=" + GOOGLE_BROWSER_API_KEY);
 
         JsonObjectRequest request = new JsonObjectRequest(googlePlacesUrl.toString(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject result) {
+                result -> {
 
-                        Log.i(TAG, "onResponse: Result= " + result.toString());
-                        parseLocationResult(result);
-                    }
+                    Log.i(TAG, "onResponse: Result= " + result.toString());
+                    parseLocationResult(result);
                 },
-                new Response.ErrorListener() {
-                    @Override                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "onErrorResponse: Error= " + error);
-                        Log.e(TAG, "onErrorResponse: Error= " + error.getMessage());
-                    }
+                error -> {
+                    Log.e(TAG, "onErrorResponse: Error= " + error);
+                    Log.e(TAG, "onErrorResponse: Error= " + error.getMessage());
                 });
 
-        appController.getInstance().addToRequestQueue(request,getApplicationContext());
+        appController.getInstance().addToRequestQueue(request, getApplicationContext());
+//YOU Can change this type at your own will, e.g hospital, cafe, restaurant.... and see how it all works
     }
 
-    private void parseLocationResult(JSONObject result) {
-
-        String id, place_id, placeName = null, reference, icon, vicinity = null;
-        double latitude, longitude;
-
+    //Parsing Json from Google Maps API to
+    private void parseLocationResult(JSONObject jsonResult) {
+        String  place_id;
         try {
-            JSONArray jsonArray = result.getJSONArray("results");
-
-            if (result.getString(STATUS).equalsIgnoreCase(OK)) {
-
-                mMap.clear();
-
+            JSONArray jsonArray = jsonResult.getJSONArray("results");
+            if (jsonResult.getString(STATUS).equalsIgnoreCase(OK)) {
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject place = jsonArray.getJSONObject(i);
+                    JSONObject placeID = jsonArray.getJSONObject(i);
+                    place_id = placeID.getString(PLACE_ID);
+                    StringBuilder googlePlacesUrl =
+                            new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
+                    googlePlacesUrl.append("placeid=").append(place_id);
+                    googlePlacesUrl.append("&key=" + GOOGLE_BROWSER_API_KEY);
+                    JsonObjectRequest request = new JsonObjectRequest(googlePlacesUrl.toString(),
+                            result -> {
 
-                    id = place.getString(SUPERMARKET_ID);
-                    place_id = place.getString(PLACE_ID);
-                    if (!place.isNull(NAME)) {
-                        placeName = place.getString(NAME);
-                    }
-                    if (!place.isNull(VICINITY)) {
-                        vicinity = place.getString(VICINITY);
-                    }
-                    latitude = place.getJSONObject(GEOMETRY).getJSONObject(LOCATION)
-                            .getDouble(LATITUDE);
-                    longitude = place.getJSONObject(GEOMETRY).getJSONObject(LOCATION)
-                            .getDouble(LONGITUDE);
-                    reference = place.getString(REFERENCE);
-                    icon = place.getString(ICON);
+                                Log.i(TAG, "onResponse: Result= " + result.toString());
+                                processResult(result);
+                                setRecycleView();
+                            },
+                            error -> {
+                                Log.e(TAG, "onErrorResponse: Error= " + error);
+                                Log.e(TAG, "onErrorResponse: Error= " + error.getMessage());
+                            });
 
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    LatLng latLng = new LatLng(latitude, longitude);
-                    markerOptions.position(latLng);
-                    markerOptions.title(placeName + " : " + vicinity);
-
-                    mMap.addMarker(markerOptions);
+                    appController.getInstance().addToRequestQueue(request, getApplicationContext());
                 }
 
-                Toast.makeText(getBaseContext(), jsonArray.length() + " Supermarkets found!",
-                        Toast.LENGTH_LONG).show();
-            } else if (result.getString(STATUS).equalsIgnoreCase(ZERO_RESULTS)) {
+//                Toast.makeText(getBaseContext(), jsonArray.length() + " Supermarkets found!",Toast.LENGTH_LONG).show();
+            } else if (jsonResult.getString(STATUS).equalsIgnoreCase(ZERO_RESULTS)) {
                 Toast.makeText(getBaseContext(), "No Supermarket found in 5KM radius!!!",
                         Toast.LENGTH_LONG).show();
             }
@@ -242,31 +210,72 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
             Log.e(TAG, "parseLocationResult: Error=" + e.getMessage());
         }
+
+    }
+    private synchronized void processResult(JSONObject result) {
+            String placeName = null, address ="", phone = "";
+            double latitude, longitude,rating =0;
+            boolean openNow = true;
+            JSONArray workHours = new JSONArray();
+            try {
+                JSONObject place = result.getJSONObject("result");
+                if (result.getString(STATUS).equalsIgnoreCase(OK)) {
+                    latitude = place.getJSONObject(GEOMETRY).getJSONObject(LOCATION)
+                            .getDouble(LATITUDE);
+                    longitude = place.getJSONObject(GEOMETRY).getJSONObject(LOCATION)
+                            .getDouble(LONGITUDE);
+                    if (!place.isNull(RATING)) {
+                        rating = place.getDouble(RATING);
+                    }
+                    if (!place.isNull(NAME)) {
+                        placeName = place.getString(NAME);
+                    }
+                    if (!place.isNull(FORMATTED_ADDRESS)) {
+                        address = place.getString(FORMATTED_ADDRESS);
+                    }
+                    if (!place.isNull(OPEING_HOURS)) {
+                        openNow = place.getJSONObject(OPEING_HOURS).getBoolean(OPEN_NOW);
+                        workHours = place.getJSONObject(OPEING_HOURS).getJSONArray(WEEKDAY_TEXT);
+                    }
+                    if(!place.isNull(PHONE)){
+                        phone = place.getString(PHONE);
+                    }
+                    NearbyPlaces newPlace = new NearbyPlaces(latitude, longitude, rating, placeName, address, openNow, workHours,phone);
+                    nearbyPlaces.add(newPlace);
+
+                }
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+                Log.e(TAG, "parseLocationResult: Error=" + e1.getMessage());
+            }
+
     }
 
+    private void setRecycleView() {
+        PlaceAdpter placeAdpter =new PlaceAdpter(this,0,nearbyPlaces);
+        placeView.setAdapter(placeAdpter);
+    }
     @Override
     public void onLocationChanged(Location location) {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-
-        LatLng latLng = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(latLng).title("My Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         loadNearByPlaces(latitude, longitude);
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
+
     }
 
     @Override
     public void onProviderEnabled(String s) {
+
     }
 
     @Override
     public void onProviderDisabled(String s) {
+
     }
 
     private boolean isGooglePlayServicesAvailable() {

@@ -39,22 +39,10 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".HospitalListActivity"
-            android:label="@string/title_hospital_list"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".HospitalDetailActivity"
-            android:label="@string/title_hospital_detail"
-            android:parentActivityName=".HospitalListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="israeltravelinsurance.israeltravelinsurance.HospitalListActivity" />
-        </activity>
-        <activity
-            android:name=".CurrentLocationNearByPlacesActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+
+
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
