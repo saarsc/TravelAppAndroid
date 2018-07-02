@@ -1,6 +1,7 @@
 package israeltravelinsurance.israeltravelinsurance;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -34,7 +35,6 @@ import java.util.List;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.FORMATTED_ADDRESS;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.GEOMETRY;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.GOOGLE_BROWSER_API_KEY;
-import static israeltravelinsurance.israeltravelinsurance.AppConfig.ICON;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.LATITUDE;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.LOCATION;
 import static israeltravelinsurance.israeltravelinsurance.AppConfig.LONGITUDE;
@@ -62,8 +62,9 @@ public class MapsActivity extends AppCompatActivity implements
     JSONObject oneLocation;
     AppController appController = new AppController();
     static ArrayList<NearbyPlaces>  nearbyPlaces = new ArrayList<>();
-    int myPremmision;
+
     ListView placeView;
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,23 +76,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         placeView = findViewById(R.id.placesList);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED ) {
-            //Should the request be displayed
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                //request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        myPremmision);
-            }
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        myPremmision);
-            }
-        }
+
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             showLocationSettings();
         }
@@ -146,15 +131,23 @@ public class MapsActivity extends AppCompatActivity implements
 
     private void loadNearByPlaces(double latitude, double longitude) {
         nearbyPlaces.clear();
-        String type = "hospital";
+        String type = getIntent().getStringExtra("place");
         StringBuilder googlePlacesUrl =
-                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-//        googlePlacesUrl.append("input=").append(type);
-        googlePlacesUrl.append("location=").append(latitude).append(",").append(longitude);
-        googlePlacesUrl.append("&radius=").append(PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&types=").append(type);
-        googlePlacesUrl.append("&sensor=true");
+                new StringBuilder();
+        if(type.equals("hospital")){
+            googlePlacesUrl.append("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+            googlePlacesUrl.append("types=").append(type);
+            googlePlacesUrl.append("&location=").append(latitude).append(",").append(longitude);
+            googlePlacesUrl.append("&radius=").append(PROXIMITY_RADIUS);
+            googlePlacesUrl.append("&sensor=true");
+        }else{
+            googlePlacesUrl.append("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?");
+            googlePlacesUrl.append("input=").append(type).append("&inputtype=textquery");
+            googlePlacesUrl.append("&fields=place_id");
+            googlePlacesUrl.append("&locationbias=circle:").append(PROXIMITY_RADIUS).append("@").append(latitude).append(",").append(longitude);
+        }
         googlePlacesUrl.append("&key=" + GOOGLE_BROWSER_API_KEY);
+        googlePlacesUrl.append("&language=iw");
 
         JsonObjectRequest request = new JsonObjectRequest(googlePlacesUrl.toString(),
                 result -> {
@@ -175,7 +168,12 @@ public class MapsActivity extends AppCompatActivity implements
     private void parseLocationResult(JSONObject jsonResult) {
         String  place_id;
         try {
-            JSONArray jsonArray = jsonResult.getJSONArray("results");
+            JSONArray jsonArray;
+            if(getIntent().getStringExtra("place").equals("hospital")) {
+                 jsonArray = jsonResult.getJSONArray("results");
+            }else{
+                jsonArray =  jsonResult.getJSONArray("candidates");
+            }
             if (jsonResult.getString(STATUS).equalsIgnoreCase(OK)) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject placeID = jsonArray.getJSONObject(i);
@@ -184,6 +182,7 @@ public class MapsActivity extends AppCompatActivity implements
                             new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
                     googlePlacesUrl.append("placeid=").append(place_id);
                     googlePlacesUrl.append("&key=" + GOOGLE_BROWSER_API_KEY);
+                    googlePlacesUrl.append("&language=iw");
                     JsonObjectRequest request = new JsonObjectRequest(googlePlacesUrl.toString(),
                             result -> {
 

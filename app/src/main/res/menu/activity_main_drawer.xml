@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <item android:title="ביטוח">
+        <menu>
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="הארכת ביטוח" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_send_file"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="שליחת קובץ" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
@@ -20,18 +21,48 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Tools" />
-    </group>
+        </menu>
+    </item>
 
-    <item android:title="Communicate">
+    <item android:title="צור קשר">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="מוקדים" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="משרד החוץ" />
+        </menu>
+    </item>
+    <item android:title="מספרי חירום">
+        <menu>
+            <item android:id="@+id/nav_police"
+                android:title="משטרה"
+                android:icon="@drawable/policeman"/>
+            <item android:id="@+id/nav_ambulance"
+                android:title="אמבולנס"
+                android:icon="@drawable/ic_ambulance"/>
+            <item android:id="@+id/nav_firetruck"
+                android:title="מכבי אש"
+                android:icon="@drawable/ic_firetruck"/>
+        </menu>
+    </item>
+    <item android:title="סביבי">
+        <menu>
+            <item
+                android:id="@+id/nav_hospital"
+                android:icon="@drawable/ic_local_hospital"
+                android:title="בתי חולים" />
+            <item
+                android:id="@+id/nav_habad"
+                android:icon="@drawable/ic_home"
+                android:title="בתי חבד" />
+            <item
+                android:id="@+id/nav_kosher_restaurant"
+                android:icon="@drawable/ic_restaurant"
+                android:title="מסעדות כשרות" />
         </menu>
     </item>
 

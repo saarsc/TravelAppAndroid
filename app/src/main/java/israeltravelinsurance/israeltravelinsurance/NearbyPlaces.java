@@ -20,16 +20,17 @@ public class NearbyPlaces {
         this.phoneNumber = phoneNumber;
 
     }
-
     private String parse(JSONArray workHours) {
-        String end ="";
-        for(int i=0; i<workHours.length();i++){
-            try {
-                end += "\n" + workHours.getString(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        String end = "";
+        try {
+            end = workHours.getString(workHours.length()-1);
+            for(int i=0; i<workHours.length()-1;i++){
+                    end += "\n" + workHours.getString(i);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
         return end;
     }
 
