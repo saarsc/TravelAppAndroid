@@ -56,6 +56,10 @@
                 android:icon="@drawable/ic_local_hospital"
                 android:title="בתי חולים" />
             <item
+                android:id="@+id/nav_dentist"
+                android:icon="@drawable/ic_doctor"
+                android:title="רופא שיניים" />
+            <item
                 android:id="@+id/nav_habad"
                 android:icon="@drawable/ic_home"
                 android:title="בתי חבד" />
@@ -63,6 +67,10 @@
                 android:id="@+id/nav_kosher_restaurant"
                 android:icon="@drawable/ic_restaurant"
                 android:title="מסעדות כשרות" />
+            <item
+                android:id="@+id/nav_attraction"
+                android:icon="@drawable/ic_navigation_black_24dp"
+                android:title="אטרקציות" />
         </menu>
     </item>
 

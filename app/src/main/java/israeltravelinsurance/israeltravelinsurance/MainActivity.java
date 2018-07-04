@@ -17,10 +17,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import android.util.Log;
 
 import java.net.URISyntaxException;
 
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_hospital:
                     Intent hospital = new Intent(MainActivity.this, MapsActivity.class);
-                    hospital.putExtra("place", "hospital");
+                    hospital.putExtra("place", "attraction");
                     startActivity(hospital);
                     break;
                 case R.id.nav_habad:
@@ -115,8 +114,18 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_kosher_restaurant:
                     Intent kosher = new Intent(MainActivity.this, MapsActivity.class);
-                    kosher.putExtra("place", "מסעדות%כשרות");
+                    kosher.putExtra("place", "מסעדות%20כשרות");
                     startActivity(kosher);
+                    break;
+                case R.id.nav_dentist:
+                    Intent dentist = new Intent(MainActivity.this, MapsActivity.class);
+                    dentist.putExtra("place", "dentist");
+                    startActivity(dentist);
+                    break;
+                case R.id.nav_attraction:
+                    Intent attraction = new Intent(MainActivity.this, MapsActivity.class);
+                    attraction.putExtra("place", "attraction");
+                    startActivity(attraction);
                     break;
             }
             return false;

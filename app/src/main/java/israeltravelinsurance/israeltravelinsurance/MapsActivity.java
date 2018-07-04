@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -134,7 +133,7 @@ public class MapsActivity extends AppCompatActivity implements
         String type = getIntent().getStringExtra("place");
         StringBuilder googlePlacesUrl =
                 new StringBuilder();
-        if(type.equals("hospital")){
+        if(type.equals("hospital") || type.equals("dentist") || type.equals("attraction")){
             googlePlacesUrl.append("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
             googlePlacesUrl.append("types=").append(type);
             googlePlacesUrl.append("&location=").append(latitude).append(",").append(longitude);
@@ -169,7 +168,7 @@ public class MapsActivity extends AppCompatActivity implements
         String  place_id;
         try {
             JSONArray jsonArray;
-            if(getIntent().getStringExtra("place").equals("hospital")) {
+            if(getIntent().getStringExtra("place").equals("hospital") || getIntent().getStringExtra("place").equals("dentist") || getIntent().getStringExtra("place").equals("attraction")) {
                  jsonArray = jsonResult.getJSONArray("results");
             }else{
                 jsonArray =  jsonResult.getJSONArray("candidates");

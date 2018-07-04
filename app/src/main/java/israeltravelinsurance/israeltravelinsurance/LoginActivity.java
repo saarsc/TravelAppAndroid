@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
         usersList = clearDup(usersList);
         String userMail = _emailText.getText().toString();
-        String returnDate = _Date.getText().toString().replace("/", ".");
+        String returnDate = _Date.getText().toString();
 
 
         // TODO: Implement your own authentication logic here.

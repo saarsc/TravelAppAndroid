@@ -44,8 +44,7 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
         String storedDate = settings.getString("date", "");
         usersList = new ArrayList<>();
         if (storedDate.equals("")) {
-        dbRef.addChildEventListener(new ChildEventListener() {
-
+            dbRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 noChild++;
@@ -53,6 +52,7 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
                 if (noChild >= dataSnapshot.getChildrenCount()) {
                     done = (true);
                 }
+
             }
 
             @Override
