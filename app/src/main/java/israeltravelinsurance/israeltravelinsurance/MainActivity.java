@@ -21,8 +21,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.net.URISyntaxException;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Intent i;
@@ -71,13 +69,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         //Navbar items
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -103,27 +101,27 @@ public class MainActivity extends AppCompatActivity
                     makeEmergenceCall();
                     break;
                 case R.id.nav_hospital:
-                    Intent hospital = new Intent(MainActivity.this, MapsActivity.class);
-                    hospital.putExtra("place", "attraction");
+                    Intent hospital = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+                    hospital.putExtra("place", "hospital");
                     startActivity(hospital);
                     break;
                 case R.id.nav_habad:
-                    Intent habad = new Intent(MainActivity.this, MapsActivity.class);
-                    habad.putExtra("place", "בית%20חבד");
+                    Intent habad = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+                    habad.putExtra("place", "בית חבד");
                     startActivity(habad);
                     break;
                 case R.id.nav_kosher_restaurant:
-                    Intent kosher = new Intent(MainActivity.this, MapsActivity.class);
-                    kosher.putExtra("place", "מסעדות%20כשרות");
+                    Intent kosher = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+                    kosher.putExtra("place", "מסעדות כשרות");
                     startActivity(kosher);
                     break;
                 case R.id.nav_dentist:
-                    Intent dentist = new Intent(MainActivity.this, MapsActivity.class);
+                    Intent dentist = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
                     dentist.putExtra("place", "dentist");
                     startActivity(dentist);
                     break;
                 case R.id.nav_attraction:
-                    Intent attraction = new Intent(MainActivity.this, MapsActivity.class);
+                    Intent attraction = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
                     attraction.putExtra("place", "attraction");
                     startActivity(attraction);
                     break;
@@ -159,11 +157,7 @@ public class MainActivity extends AppCompatActivity
                     Log.d("File URI: ","File Uri: " + uri.toString());
                     // Get the path
                     String path = null;
-                    try {
-                        path = getPath(this, uri);
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
+                    path = getPath(this, uri);
                     Log.d("File path: ", "File Path: " + path);
                     // Get the file instance
                     // File file = new File(path);
@@ -182,7 +176,7 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private String getPath(Context context, Uri uri) throws URISyntaxException {
+    private String getPath(Context context, Uri uri) {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = { "_data" };
             Cursor cursor = null;
@@ -206,7 +200,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -254,7 +248,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
