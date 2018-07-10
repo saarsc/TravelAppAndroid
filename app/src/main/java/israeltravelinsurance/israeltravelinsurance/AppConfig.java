@@ -20,13 +20,14 @@ public final class AppConfig {
     public static final String LATITUDE = "lat";
     public static final String LONGITUDE = "lng";
     public static final String ICON = "icon";
-    public static final String SUPERMARKET_ID = "id";
     public static final String NAME = "name";
     public static final String PLACE_ID = "place_id";
-    public static final String REFERENCE = "reference";
-    public static final String VICINITY = "vicinity";
-    public static final String PLACE_NAME = "place_name";
-
+    public static final String RATING = "rating";
+    public static final String OPEING_HOURS = "opening_hours";
+    public static final String OPEN_NOW = "open_now";
+    public static final String WEEKDAY_TEXT = "weekday_text";
+    public static final String FORMATTED_ADDRESS = "formatted_address";
+    public static final String PHONE = "formatted_phone_number";
     // remember to change the browser api key
     public static final String GOOGLE_BROWSER_API_KEY = "AIzaSyBivEDUxb3DAm7Id2iNqEUOBCtSlZ1a8n0";
     public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;

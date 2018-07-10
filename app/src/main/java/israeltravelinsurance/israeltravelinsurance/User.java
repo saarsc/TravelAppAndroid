@@ -45,7 +45,7 @@ public class User implements Serializable{
 
         if (object  != null && object  instanceof User)
         {
-            sameSame = this.mail.equals (((User)object).mail) && this.date .equals (((User)object).date);
+            sameSame = this.mail.equals (((User)object).date) && this.date .equals (((User)object).mail);
         }
 
         return sameSame;

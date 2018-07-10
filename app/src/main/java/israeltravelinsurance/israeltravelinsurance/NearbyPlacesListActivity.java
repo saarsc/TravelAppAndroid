@@ -5,16 +5,21 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -72,7 +77,10 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
-     */
+     */    Intent i;
+    int myPremmision;
+    private static final int FILE_SELECT_CODE = 0;
+
     private boolean mTwoPane;
 
     LocationManager locationManager;
@@ -88,20 +96,86 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearbyplaces_list);
 
-        recyclerView = findViewById(R.id.nearbyplaces_list);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
+        
+        //Fab
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        fab.setOnClickListener(view -> {
+            i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@israeltravelinsurance.co.il"});
+            i.putExtra(Intent.EXTRA_SUBJECT, "הודעה הנשלחה מתוך האפליקצייה");
+            i.putExtra(Intent.EXTRA_TEXT, "");
+            try {
+                startActivity(Intent.createChooser(i, "שלח מייל..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בשליחת מיילים", Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        //Navbar items
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+
+                case R.id.nav_send_file:
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    try {
+                        startActivityForResult(Intent.createChooser(intent, "בחר קובץ"), FILE_SELECT_CODE);
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        // Potentially direct the user to the Market with a Dialog
+                        Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בהצגת קבצים", Snackbar.LENGTH_SHORT).show();
+                    }
+                    break;
+                case R.id.nav_police:
+                    makeEmergenceCall();
+                    break;
+                case R.id.nav_ambulance:
+                    makeEmergenceCall();
+                    break;
+                case R.id.nav_firetruck:
+                    makeEmergenceCall();
+                    break;
+                case R.id.nav_hospital:
+                    Intent hospital = new Intent(NearbyPlacesListActivity.this, NearbyPlacesListActivity.class);
+                    hospital.putExtra("place", "hospital");
+                    startActivity(hospital);
+                    break;
+                case R.id.nav_habad:
+                    Intent habad = new Intent(NearbyPlacesListActivity.this, NearbyPlacesListActivity.class);
+                    habad.putExtra("place", "בית חבד");
+                    startActivity(habad);
+                    break;
+                case R.id.nav_kosher_restaurant:
+                    Intent kosher = new Intent(NearbyPlacesListActivity.this, NearbyPlacesListActivity.class);
+                    kosher.putExtra("place", "מסעדות כשרות");
+                    startActivity(kosher);
+                    break;
+                case R.id.nav_dentist:
+                    Intent dentist = new Intent(NearbyPlacesListActivity.this, NearbyPlacesListActivity.class);
+                    dentist.putExtra("place", "dentist");
+                    startActivity(dentist);
+                    break;
+                case R.id.nav_attraction:
+                    Intent attraction = new Intent(NearbyPlacesListActivity.this, NearbyPlacesListActivity.class);
+                    attraction.putExtra("place", "attraction");
+                    startActivity(attraction);
+                    break;
+            }
+            return false;
+        });
+        recyclerView = findViewById(R.id.nearbyplaces_list);
+
         if (!isGooglePlayServicesAvailable()) {
             return;
         }
@@ -116,6 +190,68 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
         View recyclerView = findViewById(R.id.nearbyplaces_list);
         assert recyclerView != null;
 //        setupRecyclerView((RecyclerView) recyclerView);
+    }
+    private void makeEmergenceCall() {
+        Uri callUri = Uri.parse("tel://112");
+        Intent callIntent = new Intent(Intent.ACTION_CALL, callUri);
+        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    myPremmision);
+        }else {
+            startActivity(callIntent);
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    Log.d("File URI: ","File Uri: " + uri.toString());
+                    // Get the path
+                    String path = null;
+                    path = getPath(this, uri);
+                    Log.d("File path: ", "File Path: " + path);
+                    // Get the file instance
+                    // File file = new File(path);
+                    // Initiate the upload
+                    Intent sendEmail = new Intent(Intent.ACTION_SEND);
+                    sendEmail.setType("vnd.android.cursor.dir/email");
+                    String to[] = {"info@israeltravelinsurance.co.il"};
+                    sendEmail.putExtra(Intent.EXTRA_EMAIL, to);
+                    sendEmail.putExtra(Intent.EXTRA_STREAM, uri);
+                    // the mail subject
+                    sendEmail .putExtra(Intent.EXTRA_SUBJECT, "קובץ");
+                    startActivity(Intent.createChooser(sendEmail , "שלח מייל..."));
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private String getPath(Context context, Uri uri) {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = { "_data" };
+            Cursor cursor = null;
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+            } catch (Exception e) {
+                // Eat it
+            }
+        }
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
     }
 
     //Location Settings are off
@@ -278,8 +414,6 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
     }
 
     private void setRecycleView() {
-//        PlaceAdpter placeAdpter =new PlaceAdpter(this,0,nearbyPlaces);
-//        placeView.setAdapter(placeAdpter);
         listAdapter =new SimpleItemRecyclerViewAdapter(this, nearbyPlaces, mTwoPane);
         recyclerView.setAdapter(listAdapter);
     }

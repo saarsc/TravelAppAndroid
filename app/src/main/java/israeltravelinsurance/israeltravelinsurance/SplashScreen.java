@@ -34,7 +34,8 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
     boolean done = false;
     int noChild = 0;
     Intent i;
-
+    DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+    Date date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,17 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 noChild++;
-                usersList.add(dataSnapshot.getValue(User.class));
+                User currentUser= dataSnapshot.getValue(User.class);
+                String temp =currentUser.getDate();
+                try {
+                    date = format.parse(currentUser.getDate());
+                    if (date.before(new Date())) {
+                        usersList.add(currentUser);
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 if (noChild >= dataSnapshot.getChildrenCount()) {
                     done = (true);
                 }
@@ -99,9 +110,8 @@ public class SplashScreen extends AppCompatActivity implements Serializable {
         }).start();
     }
      else {
-            DateFormat format = new SimpleDateFormat("dd/MM/YYYY", Locale.US);
+             format = new SimpleDateFormat("dd/MM/YYYY", Locale.US);
             try {
-                Date date;
                 date = format.parse(storedDate);
                 if (date.after(new Date())) {
                     i = new Intent(this, LoginActivity.class);

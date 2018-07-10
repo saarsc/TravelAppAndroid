@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         if (!validate()) {
-            onLoginFailed();
+//            onLoginFailed();
             return;
         }
 
@@ -114,7 +115,18 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "התחברות נכשלה. אנא בדוק את הפרטים ושאתה מחובר לאינטרנט", Toast.LENGTH_LONG).show();
-
+        Snackbar.make(findViewById(R.id.wrapper), "אין חשבון? ", Snackbar.LENGTH_INDEFINITE).setAction("הצטרף", v -> {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@israeltravelinsurance.co.il"});
+            i.putExtra(Intent.EXTRA_SUBJECT, "יצירת חשבון");
+            i.putExtra(Intent.EXTRA_TEXT, "עד התאריך: " + _Date.getText().toString());
+            try {
+                startActivity(Intent.createChooser(i, "שלח מייל..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בשליחת מיילים", Snackbar.LENGTH_SHORT).show();
+            }
+        }).show();
         _loginButton.setEnabled(true);
     }
 
@@ -155,10 +167,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean userExsits(String email, String date) {
-        User temp = new User(email, date);
-        if (usersList.contains(temp)) {
-            return true;
-        }
-        return false;
+        User temp = new User(date, email);
+        return usersList.contains(temp);
     }
 }
