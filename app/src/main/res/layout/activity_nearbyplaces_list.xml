@@ -8,7 +8,6 @@
     tools:openDrawer="start"
     tools:context=".NearbyPlacesListActivity">
 
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -23,17 +22,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/nearbyplaces_list" />
+        android:layout_marginTop="52dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            layout="@layout/nearbyplaces_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </FrameLayout>
 
-    <include
-        layout="@layout/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<include-->
+        <!--layout="@layout/tools"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 </android.support.constraint.ConstraintLayout>

@@ -63,6 +63,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="israeltravelinsurance.israeltravelinsurance.NearbyPlacesListActivity" />
         </activity>
+        <activity android:name=".contactMenu" />
+        <activity android:name=".emergancyMenu" />
+        <activity android:name=".aroundMeMenu" />
+        <activity android:name=".insuranceMenu"></activity>
     </application>
 
 </manifest>

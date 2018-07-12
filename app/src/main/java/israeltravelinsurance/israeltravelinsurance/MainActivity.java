@@ -7,32 +7,31 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Intent i;
     int myPremmision;
     private static final int FILE_SELECT_CODE = 0;
-
+    Button contactMenu;
+    Button emergancyMenu;
+    Button aroundMeMenu;
+    Button insuranceMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         //Permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //Should the request be displayed
@@ -54,80 +53,105 @@ public class MainActivity extends AppCompatActivity
                         myPremmision);
             }
         }
-        //Fab
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            i = new Intent(Intent.ACTION_SEND);
-            i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@israeltravelinsurance.co.il"});
-            i.putExtra(Intent.EXTRA_SUBJECT, "הודעה הנשלחה מתוך האפליקצייה");
-            i.putExtra(Intent.EXTRA_TEXT, "");
-            try {
-                startActivity(Intent.createChooser(i, "שלח מייל..."));
-            } catch (android.content.ActivityNotFoundException ex) {
-                Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בשליחת מיילים", Snackbar.LENGTH_SHORT).show();
-            }
-        });
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        //Fab
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(view -> {
+//            i = new Intent(Intent.ACTION_SEND);
+//            i.setType("message/rfc822");
+//            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"info@israeltravelinsurance.co.il"});
+//            i.putExtra(Intent.EXTRA_SUBJECT, "הודעה הנשלחה מתוך האפליקצייה");
+//            i.putExtra(Intent.EXTRA_TEXT, "");
+//            try {
+//                startActivity(Intent.createChooser(i, "שלח מייל..."));
+//            } catch (android.content.ActivityNotFoundException ex) {
+//                Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בשליחת מיילים", Snackbar.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+//            @Override
+//            public void onDrawerSlide(View drawerView, float slideOffset)
+//            {
+//                super.onDrawerSlide(drawerView, slideOffset);
+//                drawer.bringChildToFront(drawerView);
+//                drawer.requestLayout();
+//                drawer.setScrimColor(Color.TRANSPARENT);
+//
+//            }
+//        };
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//        //Navbar items
+//        navigationView.setNavigationItemSelectedListener(item -> {
+//            switch (item.getItemId()) {
+//
+//                case R.id.nav_send_file:
+//                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("*/*");
+//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                    try {
+//                        startActivityForResult(Intent.createChooser(intent, "בחר קובץ"), FILE_SELECT_CODE);
+//                    } catch (android.content.ActivityNotFoundException ex) {
+//                        // Potentially direct the user to the Market with a Dialog
+//                        Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בהצגת קבצים", Snackbar.LENGTH_SHORT).show();
+//                    }
+//                    break;
+//                case R.id.nav_police:
+//                    makeEmergenceCall();
+//                    break;
+//                case R.id.nav_ambulance:
+//                    makeEmergenceCall();
+//                    break;
+//                case R.id.nav_firetruck:
+//                    makeEmergenceCall();
+//                    break;
+//                case R.id.nav_hospital:
+//                    Intent hospital = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+//                    hospital.putExtra("place", "hospital");
+//                    startActivity(hospital);
+//                    break;
+//                case R.id.nav_habad:
+//                    Intent habad = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+//                    habad.putExtra("place", "בית חבד");
+//                    startActivity(habad);
+//                    break;
+//                case R.id.nav_kosher_restaurant:
+//                    Intent kosher = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+//                    kosher.putExtra("place", "מסעדות כשרות");
+//                    startActivity(kosher);
+//                    break;
+//                case R.id.nav_dentist:
+//                    Intent dentist = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+//                    dentist.putExtra("place", "dentist");
+//                    startActivity(dentist);
+//                    break;
+//                case R.id.nav_attraction:
+//                    Intent attraction = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
+//                    attraction.putExtra("place", "attraction");
+//                    startActivity(attraction);
+//                    break;
+//            }
+//            return false;
+//        });
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        //Navbar items
-        navigationView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
+        contactMenu = findViewById(R.id.contactMenu);
+        contactMenu.setOnClickListener(view -> startActivity(new Intent(this,contactMenu.class)));
 
-                case R.id.nav_send_file:
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("*/*");
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    try {
-                        startActivityForResult(Intent.createChooser(intent, "בחר קובץ"), FILE_SELECT_CODE);
-                    } catch (android.content.ActivityNotFoundException ex) {
-                        // Potentially direct the user to the Market with a Dialog
-                        Snackbar.make(findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בהצגת קבצים", Snackbar.LENGTH_SHORT).show();
-                    }
-                    break;
-                case R.id.nav_police:
-                    makeEmergenceCall();
-                    break;
-                case R.id.nav_ambulance:
-                    makeEmergenceCall();
-                    break;
-                case R.id.nav_firetruck:
-                    makeEmergenceCall();
-                    break;
-                case R.id.nav_hospital:
-                    Intent hospital = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
-                    hospital.putExtra("place", "hospital");
-                    startActivity(hospital);
-                    break;
-                case R.id.nav_habad:
-                    Intent habad = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
-                    habad.putExtra("place", "בית חבד");
-                    startActivity(habad);
-                    break;
-                case R.id.nav_kosher_restaurant:
-                    Intent kosher = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
-                    kosher.putExtra("place", "מסעדות כשרות");
-                    startActivity(kosher);
-                    break;
-                case R.id.nav_dentist:
-                    Intent dentist = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
-                    dentist.putExtra("place", "dentist");
-                    startActivity(dentist);
-                    break;
-                case R.id.nav_attraction:
-                    Intent attraction = new Intent(MainActivity.this, NearbyPlacesListActivity.class);
-                    attraction.putExtra("place", "attraction");
-                    startActivity(attraction);
-                    break;
-            }
-            return false;
-        });
+        emergancyMenu = findViewById(R.id.emergancyMenu);
+        emergancyMenu.setOnClickListener(view -> startActivity(new Intent(this,emergancyMenu.class)));
+
+        aroundMeMenu= findViewById(R.id.aroundMeMenu);
+        aroundMeMenu.setOnClickListener(view -> startActivity(new Intent(this,aroundMeMenu.class)));
+
+        insuranceMenu = findViewById(R.id.insuranceMenu);
+        insuranceMenu.setOnClickListener(view -> startActivity(new Intent(this,insuranceMenu.class)));
     }
 
     private void makeEmergenceCall() {
@@ -196,11 +220,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-        }
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//            drawer.setVisibility(View.GONE);
+//        } else {
+//        }
     }
 
     @Override

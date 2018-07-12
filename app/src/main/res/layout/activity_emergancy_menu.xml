@@ -1,64 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroumdimage"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-    <!--<include-->
-    <!--layout="@layout/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:visibility="visible" />-->
-
-
-    <!--<ImageView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:src="@mipmap/backgroundimage"-->
-    <!--tools:layout_editor_absoluteX="0dp"-->
-    <!--tools:layout_editor_absoluteY="0dp" />-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:background="@color/overlay"-->
-    <!--tools:layout_editor_absoluteX="0dp"-->
-    <!--tools:layout_editor_absoluteY="0dp">-->
-
-    <!--</LinearLayout>-->
-
+    tools:context=".emergancyMenu">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
-
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/contactMenu"
+            android:id="@+id/police"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:background="@drawable/border"
-            android:text="@string/contactMenu"
+            android:text="@string/police"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="35sp" />
 
         <Button
-            android:id="@+id/emergancyMenu"
+            android:id="@+id/ambulance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:background="@drawable/border"
-            android:text="@string/emergencyMenu"
+            android:text="@string/ambulance"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="35sp" />
 
     </LinearLayout>
 
@@ -69,28 +41,20 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/aroundMeMenu"
+            android:id="@+id/fire"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:background="@drawable/border"
-            android:text="@string/title_nearbyplaces_list"
+            android:text="@string/fire"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="40sp" />
 
         <Button
-            android:id="@+id/insuranceMenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
-            android:background="@drawable/border"
-            android:text="@string/insuranceMenu"
-            android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:background="@drawable/border" />
 
     </LinearLayout>
-
-
 </LinearLayout>
-
-

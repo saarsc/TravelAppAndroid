@@ -44,10 +44,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:15.0.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.android.gms:play-services-gcm:15.0.1'
-    implementation 'com.google.android.gms:play-services-base:15.0.1'
+//    implementation 'com.google.android.gms:play-services-base:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
-
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
 }
 
 apply plugin: 'com.google.gms.google-services'
