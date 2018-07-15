@@ -17,4 +17,6 @@
 
     <color name="border">#85000000</color>
     <color name="overlay">#55000000</color>
+
+    <color name="hint">#59ABE3</color>
 </resources>

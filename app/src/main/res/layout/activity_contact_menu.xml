@@ -5,4 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".contactMenu">
 
+    <ExpandableListView
+        android:id="@+id/lvExp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="#446CB3"
+        android:childIndicatorEnd="0dp"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+
+    </ExpandableListView>
 </android.support.constraint.ConstraintLayout>

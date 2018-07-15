@@ -17,4 +17,18 @@
     <string name="gogle_API_key">AIzaSyBnt2b3D0l5ehKgGFY0AoimrluS4cs8sxY</string>
     <string name="title_nearbyplaces_list">סביבי</string>
     <string name="title_nearbyplaces_detail"> מידע נוסף</string>
+
+    <string name="contactMenu">צור\n קשר</string>
+    <string name="emergencyMenu">מספרי \n חירום</string>
+    <string name="insuranceMenu">ביטוח</string>
+
+    <string name="hospital">בתי \n חולים</string>
+    <string name="dentist">רופא \n שיניים</string>
+    <string name="habad">בית \n חבד</string>
+    <string name="kosher">מסעדות \n כשרות</string>
+    <string name="attraction">אטרקציות</string>
+
+    <string name="police">משטרה</string>
+    <string name="ambulance">אמבולנס</string>
+    <string name="fire">מכבי \n אש</string>
 </resources>
