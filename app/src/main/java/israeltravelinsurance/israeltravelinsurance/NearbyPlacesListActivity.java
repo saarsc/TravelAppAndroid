@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -73,24 +74,28 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
-     */    Intent i;
+     */
+    Intent i;
     int myPremmision;
     private static final int FILE_SELECT_CODE = 0;
 
     private boolean mTwoPane;
 
     LocationManager locationManager;
-    AppController appController = new AppController();
     static ArrayList<NearbyPlaces> nearbyPlaces = new ArrayList<>();
     RecyclerView recyclerView;
 
     static String type;
     SimpleItemRecyclerViewAdapter listAdapter;
+    AppController appController;
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearbyplaces_list);
+
+        appController = new AppController();
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,18 +116,7 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
         assert recyclerView != null;
 //        setupRecyclerView((RecyclerView) recyclerView);
     }
-    private void makeEmergenceCall() {
-        Uri callUri = Uri.parse("tel://112");
-        Intent callIntent = new Intent(Intent.ACTION_CALL, callUri);
-        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CALL_PHONE},
-                    myPremmision);
-        }else {
-            startActivity(callIntent);
-        }
-    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -130,7 +124,7 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
                 if (resultCode == RESULT_OK) {
                     // Get the Uri of the selected file
                     Uri uri = data.getData();
-                    Log.d("File URI: ","File Uri: " + uri.toString());
+                    Log.d("File URI: ", "File Uri: " + uri.toString());
                     // Get the path
                     String path = null;
                     path = getPath(this, uri);
@@ -144,8 +138,8 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
                     sendEmail.putExtra(Intent.EXTRA_EMAIL, to);
                     sendEmail.putExtra(Intent.EXTRA_STREAM, uri);
                     // the mail subject
-                    sendEmail .putExtra(Intent.EXTRA_SUBJECT, "קובץ");
-                    startActivity(Intent.createChooser(sendEmail , "שלח מייל..."));
+                    sendEmail.putExtra(Intent.EXTRA_SUBJECT, "קובץ");
+                    startActivity(Intent.createChooser(sendEmail, "שלח מייל..."));
                 }
                 break;
         }
@@ -154,7 +148,7 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
 
     private String getPath(Context context, Uri uri) {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
+            String[] projection = {"_data"};
             Cursor cursor = null;
 
             try {
@@ -166,8 +160,7 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
             } catch (Exception e) {
                 // Eat it
             }
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
 
@@ -334,7 +327,7 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
     }
 
     private void setRecycleView() {
-        listAdapter =new SimpleItemRecyclerViewAdapter(this, nearbyPlaces, mTwoPane);
+        listAdapter = new SimpleItemRecyclerViewAdapter(this, nearbyPlaces, mTwoPane);
         recyclerView.setAdapter(listAdapter);
     }
 
@@ -388,11 +381,11 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
         locationManager.removeUpdates(this);
     }
 
-    @SuppressLint("MissingPermission")
+
     @Override
     public void onResume() {
         super.onResume();
-        if(listAdapter != null) {
+        if (listAdapter != null) {
             nearbyPlaces.clear();
             listAdapter.notifyDataSetChanged();
         }
@@ -409,11 +402,73 @@ public class NearbyPlacesListActivity extends AppCompatActivity implements
         }
         Criteria criteria = new Criteria();
         String bestProvider = locationManager.getBestProvider(criteria, true);
-        locationManager.requestLocationUpdates(bestProvider, MIN_TIME_BW_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+        //Permissions
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //Should the request be displayed
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        myPremmision);
+                return;
+            }else{
+                //request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        myPremmision);
+            }
+
+        }
+//        locationManager.requestLocationUpdates(bestProvider, MIN_TIME_BW_UPDATES,
+//                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+    }
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //Get the current user location
+                    Location location = getLastKnownLocation();
+
+                    if (location != null) {
+                        onLocationChanged(location);
+                    }
+                    Criteria criteria = new Criteria();
+                    String bestProvider = locationManager.getBestProvider(criteria, true);
+
+                    locationManager.requestLocationUpdates(bestProvider, MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                } else {
+
+                    Intent intent = new Intent(this,aroundMeMenu.class);
+                    startActivity(intent);
+                    finish();
+                }
+                return;
+            }
+        }
     }
 //    @Override
 //    public void onStart() {
+//        super.onStart();
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//
+//            return;
+//        }
+//    }
 //        super.onStart();
 //        nearbyPlaces.clear();
 //                locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

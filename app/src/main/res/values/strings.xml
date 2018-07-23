@@ -1,9 +1,20 @@
 <resources>
-    <string name="app_name">IsraelTravel Insurance</string>
+    <string name="app_name">המרכז הישראלי לביטוחי נסיעות לחו"ל</string>
     <string name="action_sign_in_short">הירשם</string>
     <string name="email">אימייל</string>
-    <string name="date">תאריך חזרה</string>
+    <string name="dateBack">תאריך חזרה</string>
+    <string name="dateLeave">תאריך טיסה</string>
     <string name="btn_login">התחבר</string>
+    <string name="btn_signup">הירשם</string>
+    <string name="to_signup1">אין חשבון?</string>
+    <string name="to_signin1">יש חשבון?</string>
+    <string name="to_signup2"> לחץ כדי להירשם</string>
+    <string name="to_signin2"> לחץ כדי להתחבר</string>
+    <string name="name">שם</string>
+    <string name="phone">טלפון</string>
+    <string name="pastCustomer">האם רכשת כבר ביטוח לנסיעה הקרובה?</string>
+    <string name="tosCheck">אני מסכים</string>
+    <string name="tosText">לתנאי השירות</string>
     <string name="welcome">ברוכים הבאים</string>
 
     <string name="title_activity_main">IsraelTravel Insurance</string>
@@ -18,17 +29,32 @@
     <string name="title_nearbyplaces_list">סביבי</string>
     <string name="title_nearbyplaces_detail"> מידע נוסף</string>
 
-    <string name="contactMenu">צור\n קשר</string>
-    <string name="emergencyMenu">מספרי \n חירום</string>
+    <string name="contactMenu">מוקדים</string>
+    <string name="emergencyMenu">מספרי\nחירום</string>
     <string name="insuranceMenu">ביטוח</string>
+    <string name="whatsapp">WhatsApp</string>
+    <string name="buyInsurance">לרכישת ביטוח\nאונליין</string>
 
-    <string name="hospital">בתי \n חולים</string>
-    <string name="dentist">רופא \n שיניים</string>
-    <string name="habad">בית \n חבד</string>
-    <string name="kosher">מסעדות \n כשרות</string>
+    <string name="hospital">בתי\nחולים</string>
+    <string name="dentist">רופא\nשיניים</string>
+    <string name="habad">בית\nחבד</string>
+    <string name="kosher">מסעדות\nכשרות</string>
     <string name="attraction">אטרקציות</string>
+    <string name="ATM">כספומט</string>
 
     <string name="police">משטרה</string>
     <string name="ambulance">אמבולנס</string>
-    <string name="fire">מכבי \n אש</string>
+    <string name="fire">מכבי\nאש</string>
+
+    <string name="sendFile">שלח קובץ</string>
+    <string name="increaseInsurance">הארכת ביטוח</string>
+    <string name="Claims">תביעות</string>
+
+
+    <string name="passportCard">פספורטכארד </string>
+    <string name="afenix">הפניקס</string>
+    <string name="Migdal">מגדל</string>
+    <string name="Arhel">הראל</string>
+    <string name="menora">מנורה</string>
+
 </resources>

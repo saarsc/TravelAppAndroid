@@ -34,13 +34,13 @@ public class emergancyMenu extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.nav_police:
+            case R.id.police:
                 makeEmergenceCall();
                 break;
-            case R.id.nav_ambulance:
+            case R.id.ambulance:
                 makeEmergenceCall();
                 break;
-            case R.id.nav_firetruck:
+            case R.id.fire:
                 makeEmergenceCall();
                 break;
         }

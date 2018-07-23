@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class User implements Serializable{
     private String mail;
     private String date;
+    private String leavingDate;
 
     public User(String mail, String date) {
         this.mail = mail;
@@ -49,5 +50,9 @@ public class User implements Serializable{
         }
 
         return sameSame;
+    }
+
+    public String getLeavingDate() {
+        return leavingDate;
     }
 }

@@ -1,8 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".insuranceMenu">
+    android:orientation="vertical"
+    tools:context=".insuranceMenu"
+    android:background="@drawable/backgroumdimage">
 
-</android.support.constraint.ConstraintLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnSendFile"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/sendFile"-->
+            <!--android:textSize="36sp" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnIncrease"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/increaseInsurance"-->
+            <!--android:textSize="36sp" />-->
+    <!--</LinearLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSendFile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/border"
+            android:text="@string/sendFile"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+
+        <Button
+            android:id="@+id/btnIncrease"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/border"
+            android:text="@string/increaseInsurance"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/claimsMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/border"
+            android:text="@string/Claims"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+
+        <Button
+            android:id="@+id/insuranceMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/border"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+
+
+    </LinearLayout>
+</LinearLayout>

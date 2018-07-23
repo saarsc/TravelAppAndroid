@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity
     Button emergancyMenu;
     Button aroundMeMenu;
     Button insuranceMenu;
+    Button buyInsurance;
+    Button whatsapp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +46,15 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        myPremmision);
-            }
-        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                //request the permission.
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                        myPremmision);
+//            }
+//        }
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 //        //Fab
@@ -152,6 +154,12 @@ public class MainActivity extends AppCompatActivity
 
         insuranceMenu = findViewById(R.id.insuranceMenu);
         insuranceMenu.setOnClickListener(view -> startActivity(new Intent(this,insuranceMenu.class)));
+
+        buyInsurance = findViewById(R.id.site);
+        buyInsurance.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://israeltravelinsurance.co.il"))));
+
+        whatsapp = findViewById(R.id.whatsapp);
+        whatsapp.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse( "https://api.whatsapp.com/send?phone=+9720505255785"))));
     }
 
     private void makeEmergenceCall() {

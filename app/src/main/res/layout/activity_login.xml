@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wrapper"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -25,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/loginLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_title"
@@ -33,10 +34,12 @@
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="150dp"
+        android:animateLayoutChanges="true"
         android:background="#fff"
         android:elevation="4dp"
         android:orientation="vertical"
         android:padding="20dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,11 +78,43 @@
                     android:drawableStart="@drawable/lock"
                     android:drawableTint="#FF4081"
                     android:focusable="false"
-                    android:hint="@string/date"
+                    android:hint="@string/dateBack"
                     android:inputType="date"
                     android:singleLine="true" />
+
+
             </android.support.design.widget.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/to_signup1"
+                    android:textAlignment="center"
+                    android:textDirection="rtl"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="20dp"
+                    tools:layout_editor_absoluteY="572dp" />
+
+                <TextView
+                    android:id="@+id/toSignup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/to_signup2"
+                    android:textAlignment="gravity"
+                    android:textColor="#5fb0c9"
+                    android:textDirection="rtl"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="20dp"
+                    tools:layout_editor_absoluteY="572dp" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_login"
@@ -91,6 +126,7 @@
                 android:textAllCaps="false"
                 android:textColor="#fff"
                 android:textSize="18sp" />
+
         </LinearLayout>
     </RelativeLayout>
 
@@ -106,10 +142,200 @@
         android:background="@drawable/user_profile_image_background"
         android:elevation="4dp"
         android:src="@drawable/profile_icon"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintBottom_toTopOf="@+id/loginLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_title" />
+
+    <RelativeLayout
+        android:id="@+id/signupLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_title"
+        android:layout_marginBottom="85dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="150dp"
+        android:animateLayoutChanges="true"
+        android:background="#fff"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="30dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/input_nameSignUp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/user"
+                    android:drawableTint="#FF4081"
+                    android:hint="@string/name"
+                    android:inputType="textPersonName"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_emailSignUp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/user"
+                    android:drawableTint="#FF4081"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/input_phoneSignUp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/user"
+                    android:drawableTint="#FF4081"
+                    android:hint="@string/phone"
+                    android:inputType="phone"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/dateLeaveSignUp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+
+                        android:focusable="false"
+                        android:hint="@string/dateLeave"
+                        android:inputType="date"
+                        android:singleLine="true" />
+
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/dateBackSignUp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_weight="1"
+
+                        android:focusable="false"
+                        android:hint="@string/dateBack"
+                        android:inputType="date"
+                        android:singleLine="true" />
+
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/pastCustomer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/pastCustomer" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/tos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/tosCheck" />
+
+                <TextView
+                    android:id="@+id/tosDisplay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/tosText"
+                    android:textColor="#5fb0c9" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/to_signin1"
+                    android:textAlignment="center"
+                    android:textDirection="rtl"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="20dp"
+                    tools:layout_editor_absoluteY="572dp" />
+
+                <TextView
+                    android:id="@+id/toSignin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/to_signin2"
+                    android:textAlignment="textStart"
+                    android:textColor="#5fb0c9"
+                    android:textDirection="rtl"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="20dp"
+                    tools:layout_editor_absoluteY="572dp" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_signup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="22dp"
+                android:background="#d67601"
+                android:text="@string/btn_signup"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

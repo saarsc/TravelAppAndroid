@@ -1,67 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroumdimage"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-    <!--<include-->
-    <!--layout="@layout/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:visibility="visible" />-->
-
-
-    <!--<ImageView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:src="@mipmap/backgroundimage"-->
-    <!--tools:layout_editor_absoluteX="0dp"-->
-    <!--tools:layout_editor_absoluteY="0dp" />-->
+    tools:context=".insuranceMenu"
+    android:background="@drawable/backgroumdimage">
 
     <!--<LinearLayout-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"-->
-    <!--android:background="@color/overlay"-->
-    <!--tools:layout_editor_absoluteX="0dp"-->
-    <!--tools:layout_editor_absoluteY="0dp">-->
+    <!--android:orientation="horizontal">-->
 
+    <!--<Button-->
+    <!--android:id="@+id/btnSendFile"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="@string/sendFile"-->
+    <!--android:textSize="36sp" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/btnIncrease"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="@string/increaseInsurance"-->
+    <!--android:textSize="36sp" />-->
     <!--</LinearLayout>-->
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.0"
-
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/contactMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:background="@drawable/border"
-            android:text="@string/contactMenu"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
-
-        <Button
-            android:id="@+id/emergancyMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:background="@drawable/border"
-            android:text="@string/emergencyMenu"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
-
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -69,56 +35,51 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/aroundMeMenu"
+            android:id="@+id/passportCard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:background="@drawable/border"
-            android:text="@string/title_nearbyplaces_list"
-            android:textColor="@color/white"
-            android:textSize="35sp" />
-
-        <Button
-            android:id="@+id/insuranceMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:background="@drawable/border"
-            android:text="@string/insuranceMenu"
-            android:textColor="@color/white"
-            android:textSize="35sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.0"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/whatsapp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:background="@drawable/border"
-            android:text="@string/whatsapp"
+            android:text="@string/passportCard"
             android:textColor="@color/white"
             android:textSize="30sp" />
 
         <Button
-            android:id="@+id/site"
+            android:id="@+id/afenix"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:background="@drawable/border"
-            android:text="@string/buyInsurance"
+            android:text="@string/afenix"
             android:textColor="@color/white"
             android:textSize="35sp" />
 
+
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/Migdal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/border"
+            android:text="@string/Migdal"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+
+        <Button
+            android:id="@+id/Arhel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@drawable/border"
+            android:text="@string/Arhel"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+    </LinearLayout>
 </LinearLayout>
-
-

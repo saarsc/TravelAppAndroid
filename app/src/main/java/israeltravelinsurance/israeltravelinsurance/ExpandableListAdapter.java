@@ -90,7 +90,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         final String childTitle = ((contactMenu.childItem) getChild(i,i1)).getTitle();
         final String childHint = ((contactMenu.childItem) getChild(i,i1)).getHint();
-
+        final String childLink =((contactMenu.childItem) getChild(i,i1)).getLink();
         if(view == null)
         {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,14 +121,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             } catch (android.content.ActivityNotFoundException ex) {
                 Snackbar.make(context.findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בשליחת מיילים", Snackbar.LENGTH_SHORT).show();
             }
-            }else if(childHint.equals("")){
+            }else if(childTitle.contains("עולם") || childTitle.equals("אתר")){
                 try {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://israeltravelinsurance.co.il/PDF/PassportCard%20contact.pdf"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(childLink));
                     context.startActivity(browserIntent);
                 } catch (ActivityNotFoundException e) {
                     Snackbar.make(context.findViewById(R.id.fab), "אנא התקן האפליקצייה התומכת בפתיחת קישורים", Snackbar.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
+            }else if(childTitle.equals("אפליקצייה")){
+                try {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + childLink)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + childLink)));
+                }
+            }else if(childTitle.equals("WhatsApp")){
+                context.startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse( "https://api.whatsapp.com/send?phone=+9720505255785")));
             }
         });
         hintListChild.setText(childHint);
